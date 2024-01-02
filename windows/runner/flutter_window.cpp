@@ -62,13 +62,13 @@ static wil::com_ptr<ICoreWebView2> webview;
 
 void MakeButton(HWND parent) {
     HWND group = CreateWindow(L"STATIC", L"", WS_CHILD | WS_VISIBLE, 0, 400, 200, 200, parent, NULL, NULL, NULL);
-    HWND button = CreateWindow(L"BUTTON", L"OK", WS_CHILD | WS_VISIBLE, 0, 0, 50, 25, group, NULL, NULL, NULL);
+    HWND button = CreateWindow(L"BUTTON", L"OK", WS_CHILD | WS_VISIBLE | WS_TABSTOP, 0, 0, 50, 25, group, NULL, NULL, NULL);
 
-    HWND edit = CreateWindow(L"EDIT", L"Edit", WS_CHILD | WS_VISIBLE, 0, 100, 200, 50, group, NULL, NULL, NULL);
+    HWND edit = CreateWindow(L"EDIT", L"Edit", WS_CHILD | WS_VISIBLE | WS_TABSTOP, 0, 100, 200, 50, group, NULL, NULL, NULL);
     (void)(edit);
 
-    HWND hWndPar = CreateWindow(L"STATIC", L"", WS_CHILD | WS_VISIBLE, 50, 20, 800, 400, parent, NULL, NULL, NULL);
-    HWND hWnd = CreateWindow(WEBVIEW_CLASSNAME, L"WebView", WS_CHILD | WS_VISIBLE, 0, 0, 800, 400, hWndPar, NULL, NULL, NULL);
+    HWND hWndPar = CreateWindow(L"STATIC", L"", WS_CHILD | WS_VISIBLE, 70, 70, 800, 400, parent, NULL, NULL, NULL);
+    HWND hWnd = CreateWindow(L"STATIC", L"WebView", WS_CHILD | WS_VISIBLE, 0, 0, 800, 400, hWndPar, NULL, NULL, NULL);
 	CreateCoreWebView2EnvironmentWithOptions(nullptr, nullptr, nullptr,
 		Microsoft::WRL::Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(
 			[hWnd](HRESULT result, ICoreWebView2Environment* env) -> HRESULT {
@@ -187,6 +187,10 @@ FlutterWindow::MessageHandler(HWND hwnd, UINT const message,
   }
 
   return Win32Window::MessageHandler(hwnd, message, wparam, lparam);
+}
+
+HWND FlutterWindow::GetWndParent() {
+  return flutter_controller_->view()->GetNativeWindow();
 }
 
 LRESULT CALLBACK WebviewWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
